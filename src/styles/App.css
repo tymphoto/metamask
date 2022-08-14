@@ -1,0 +1,30 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.connect_container {
+  margin-top: 10px;
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.conButton {
+  font-size: 36px;
+  padding: 16px;
+  border-radius: 16px;
+  background-color: dodgerblue;
+  color: white;
+}
+
+.account_display {
+  margin-top: 10px;
+}
+
+.errorMessage {
+  margin-top: 10px;
+}
