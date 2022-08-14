@@ -9,6 +9,7 @@ function WalletCard() {
   const [userBalance, setUserBalance] = useState(null);
   const [connButtonText, setConnButtonText] = useState('Connect Wallet');
 
+  // Асинхронный запрос баланса кошелька
   async function getAccountBalance(account) {
     try {
       const balance = await window.ethereum.request({
@@ -21,6 +22,7 @@ function WalletCard() {
     }
   }
 
+  // Метод для получения аккаунта из localStorage
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('wallet'));
     if (saved) {
@@ -30,17 +32,20 @@ function WalletCard() {
     }
   }, []);
 
+  // Запись аккаунта в localStorage
   useEffect(() => {
     localStorage.setItem('wallet', JSON.stringify(defaultAccount));
   }, [defaultAccount]);
 
+  // Функция для изменения состояний аккаунта и баланса
   const accountChangedHandler = (newAccount) => {
     setDefaultAccount(newAccount);
     getAccountBalance(newAccount.toString());
   };
 
+  // Ассинронный запрос аккаунта из MetaMask
   async function connectWalletHandler() {
-    if (window.ethereum && window.ethereum.isMetaMask) {
+    if (window.ethereum && window.ethereum.isMetaMask) { // если метамаск подключен
       try {
         const account = await window.ethereum.request({
           method: 'eth_requestAccounts',
@@ -51,17 +56,19 @@ function WalletCard() {
       } catch (error) {
         setErrorMessage(error.message);
       }
-    } else {
+    } else { // если нет такого плагина, предложение его установить
       console.log('Need to install MetaMask');
       setErrorMessage('Please install MetaMask browser extension to interact');
     }
   }
 
+  // Ф-я перезагрузки страницы при смене аккаунта для сброса состояний
   const chainChangedHandler = () => {
     window.location.reload();
   };
 
-  window.ethereum.on('accountsChanged', chainChangedHandler);
+  // Методы следящие за изменением аккаунта и сети
+  window.ethereum.on('accountsChanged', connectWalletHandler);
   window.ethereum.on('chainChanged', chainChangedHandler);
 
   return (
@@ -86,12 +93,15 @@ function WalletCard() {
       </div>
       {defaultAccount
         ? (
-          <div className="connect_container">
-            <SendForm />
+          <div>
+            <div className="connect_container">
+              <SendForm />
+
+            </div>
+            <Transactions address={defaultAccount} />
           </div>
         )
         : ''}
-      <Transactions address={defaultAccount} />
     </div>
   );
 }

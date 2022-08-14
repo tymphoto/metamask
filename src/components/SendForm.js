@@ -8,23 +8,26 @@ function SendForm() {
   const [address, setAddress] = useState('');
   const [sum, setSum] = useState(0);
 
+  // Изменение состояния инпута с адресом отправки
   const changeAddresHandler = (event) => {
     setAddress(event.target.value);
   };
 
+  // Изменение состояния инпута с суммой отправки
   const changeSumHandler = (event) => {
     setSum(event.target.value);
   };
 
+  // Ф-я для оссуществления транзакции
   const startPayment = async (e, summ, addr) => {
     e.preventDefault();
     try {
+      // создание провайдера из библиотеки ethers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      ethers.utils.getAddress(addr);
       const tx = await signer.sendTransaction({
-        to: addr,
-        value: ethers.utils.parseEther(summ),
+        to: ethers.utils.getAddress(addr), // проверка валидности адреса
+        value: ethers.utils.parseEther(summ), // проверка валидности суммы
       });
       window.location.reload();
     } catch (error) {
