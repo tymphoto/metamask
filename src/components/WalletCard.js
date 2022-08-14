@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import SendForm from './SendForm';
+import Transactions from './Transactions';
 
 function WalletCard() {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -56,13 +57,11 @@ function WalletCard() {
     }
   }
 
-  // Перезагрузить страницу при смене аккаунта
   const chainChangedHandler = () => {
     window.location.reload();
   };
 
-  // Слушатель изменения аккаунта
-  window.ethereum.on('accountsChanged', accountChangedHandler);
+  window.ethereum.on('accountsChanged', chainChangedHandler);
   window.ethereum.on('chainChanged', chainChangedHandler);
 
   return (
@@ -92,7 +91,7 @@ function WalletCard() {
           </div>
         )
         : ''}
-
+      <Transactions address={defaultAccount} />
     </div>
   );
 }
