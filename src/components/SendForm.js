@@ -8,6 +8,8 @@ function SendForm() {
   const [address, setAddress] = useState('');
   const [sum, setSum] = useState(0);
 
+  console.log('test ssh')
+
   // Изменение состояния инпута с адресом отправки
   const changeAddresHandler = (event) => {
     setAddress(event.target.value);
